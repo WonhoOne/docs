@@ -8,16 +8,21 @@ AI 기반 미스터 월드 테마 여행 서비스의 **공통 문서 저장소(
 
 **사람과 AI Agent 모두 코드 작성/수정 전에 아래 문서를 순서대로 반드시 확인해야 합니다.**
 
-1. [Baseline v0.1](baseline/BASELINE-v0.1.md)
+승인된 최신 Baseline은 `docs/main`에 병합된 버전입니다. 이 PR이 병합되기 전에는 [Baseline v0.1](baseline/BASELINE-v0.1.md)이 승인본이고, 이 branch의 v0.1.1은 **proposal**입니다. 아래 v0.1.1 링크는 병합 후 최신 승인 Baseline을 가리킵니다. 병합 전 구현은 `docs/main`의 승인본을 기준으로 합니다.
+
+1. [Baseline v0.1.1](baseline/BASELINE-v0.1.1.md)
 2. [Requirements](requirements/requirements.md)
-3. [Domain Model](requirements/domain-model.md)
-4. [Business Rules](requirements/business-rules.md)
-5. [System Architecture](architecture/system-architecture.md)
-6. [Repository Responsibilities](architecture/repository-responsibilities.md)
-7. [API Spec Draft](api/api-spec-draft.md)
-8. [ERD Draft](database/erd-draft.md)
-9. 담당 작업이 Voice 관련이면 [Voice Contract](architecture/voice-contract.md)
-10. 작업/PR 규칙은 [CONTRIBUTING.md](CONTRIBUTING.md) 및 [AGENTS.md](AGENTS.md)
+3. [Product Catalog](requirements/product-catalog.md)
+4. [Domain Model](requirements/domain-model.md)
+5. [Business Rules](requirements/business-rules.md)
+6. [Non-functional Requirements](requirements/non-functional-requirements.md)
+7. [System Architecture](architecture/system-architecture.md)
+8. [Repository Responsibilities](architecture/repository-responsibilities.md)
+9. [API Spec Draft](api/api-spec-draft.md)
+10. [ERD Draft](database/erd-draft.md)
+11. 담당 작업이 Voice 관련이면 [Voice Contract](architecture/voice-contract.md)
+12. [CONTRIBUTING.md](CONTRIBUTING.md)
+13. [AGENTS.md](AGENTS.md)
 
 ### Agent rules
 
@@ -29,7 +34,7 @@ AI 기반 미스터 월드 테마 여행 서비스의 **공통 문서 저장소(
 - 다른 파트 코드는 분석, API 확인, 통합 원인 파악을 위해 읽을 수 있지만 직접 수정·커밋·PR 생성하지 않습니다.
 - 타 파트 코드 변경이 필요하면 해당 Repository Owner에게 Issue/변경 요청을 전달합니다. 팀/Owner가 명시적으로 작업을 위임한 경우에만 예외적으로 수정할 수 있습니다.
 - 미확정 사항은 추측해서 확정하지 않고 **TBD**로 유지합니다.
-- 구현 결과가 현재 Baseline과 충돌하면 Baseline을 우선하고, 변경이 필요하면 팀 합의를 위한 Issue/PR을 만듭니다.
+- 구현 결과가 `docs/main`의 승인 Baseline과 충돌하면 승인 Baseline을 우선하고, 변경이 필요하면 팀 합의를 위한 Issue/PR을 만듭니다.
 
 ## Repository structure
 
@@ -39,11 +44,14 @@ AI 기반 미스터 월드 테마 여행 서비스의 **공통 문서 저장소(
 ├── AGENTS.md
 ├── CONTRIBUTING.md
 ├── baseline/
-│   └── BASELINE-v0.1.md
+│   ├── BASELINE-v0.1.md
+│   └── BASELINE-v0.1.1.md
 ├── requirements/
 │   ├── requirements.md
+│   ├── product-catalog.md
 │   ├── domain-model.md
-│   └── business-rules.md
+│   ├── business-rules.md
+│   └── non-functional-requirements.md
 ├── architecture/
 │   ├── system-architecture.md
 │   ├── repository-responsibilities.md

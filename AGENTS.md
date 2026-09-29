@@ -1,20 +1,24 @@
 # AI Agent Instructions
 
-This repository is the project documentation SSOT.
+This repository is the project documentation SSOT. `docs/main` is the approved SSOT. A docs feature branch is a proposal until merged. Implementation Agents must not implement against an unapproved proposal.
 
 ## Before any implementation task
 
-Read, in order:
+After v0.1.1 is merged, read in order. Before merge, follow the mandatory reading list on the approved `docs/main` branch:
 
-1. `baseline/BASELINE-v0.1.md`
+1. `baseline/BASELINE-v0.1.1.md`
 2. `requirements/requirements.md`
-3. `requirements/domain-model.md`
-4. `requirements/business-rules.md`
-5. `architecture/system-architecture.md`
-6. `architecture/repository-responsibilities.md`
-7. `api/api-spec-draft.md`
-8. `database/erd-draft.md`
-9. `architecture/voice-contract.md` when the task affects Voice.
+3. `requirements/product-catalog.md`
+4. `requirements/domain-model.md`
+5. `requirements/business-rules.md`
+6. `requirements/non-functional-requirements.md`
+7. `architecture/system-architecture.md`
+8. `architecture/repository-responsibilities.md`
+9. `api/api-spec-draft.md`
+10. `database/erd-draft.md`
+11. `architecture/voice-contract.md` when the task affects Voice.
+12. `CONTRIBUTING.md`
+13. `AGENTS.md`
 
 ## Non-negotiable rules
 
