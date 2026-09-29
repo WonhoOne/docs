@@ -58,7 +58,7 @@ POST /api/v1/employee/inventory
 ## Contract rules
 
 - Request DTO, Response DTO, error response format, validation details, pagination, authentication token format은 v0.2에서 확정합니다. 인증 방식과 JWT/session 여부도 TBD입니다.
-- Reservation의 `participantCount`는 1 이상의 정수이고 TourSchedule 신청 인원은 이 값의 합입니다. 이 개념이 구체적인 Request/Response DTO에서 어떻게 표현되는지는 v0.2에서 확정합니다.
+- `POST /api/v1/reservations`는 승인된 BR-07 / BR-13을 따라야 합니다. 일반 Reservation은 `participantCount` 1 이상이며, Honeymoon Reservation은 pair/couple 단위 제약을 충족해야 합니다. Backend가 이를 검증합니다. 구체적인 Request/Response DTO field representation은 v0.2에서 확정합니다. 일반 일정은 `participantCount` 합계로, Honeymoon 일정은 유효 Reservation들의 파생 couple/team 수로 모집 상태를 집계합니다.
 - Customer/Employee 가입 시 `name`, `address`, `contact`를 최소 저장합니다. 구체적인 signup DTO 및 사용자 역할 표현은 v0.2에서 확정합니다.
 - SMS는 TourSchedule 최초 확정 시 실제 전송되어야 하지만, 새 SMS endpoint를 이 skeleton에 추가하지 않습니다. SMS Provider는 TBD입니다.
 - Frontend와 Voice/Console은 이 API를 통해 Backend와 통신합니다.

@@ -1,4 +1,4 @@
-# Requirements v0.1.1
+# Requirements v0.1.2
 
 ## System purpose
 
@@ -31,9 +31,9 @@
 | FR-03 | 고객은 여행 테마를 선택할 수 있다. |
 | FR-04 | 고객은 Tour Style을 선택할 수 있다. |
 | FR-05 | 고객은 호텔, 교통, 식사 등 세부 옵션을 변경할 수 있다. |
-| FR-06 | 고객은 선택한 TourConfiguration으로 특정 TourSchedule에 1명 이상을 한 번에 예약할 수 있다. |
-| FR-07 | 시스템은 일정별 신청 인원을 Reservation의 `participantCount` 합으로 집계한다. |
-| FR-08 | 신청 인원이 기준 이상이면 해당 여행 일정을 확정한다. |
+| FR-06 | 고객은 선택한 TourConfiguration으로 특정 TourSchedule에 예약할 수 있다. 일반 Theme Reservation은 `participantCount` 1명 이상이며, `HONEYMOON_ROMANCE` Reservation은 couple/team 단위로 2명 이상의 짝수 `participantCount`를 사용한다. 한 Reservation은 여러 명 또는 여러 couple/team을 포함할 수 있다. |
+| FR-07 | 시스템은 일반 일정의 신청 인원을 Reservation `participantCount` 합으로 집계하고, Honeymoon 일정의 모집 상태는 유효한 Reservation별 `participantCount / 2`에서 파생된 couple/team 수 합으로 집계한다. |
+| FR-08 | 일반 Theme 일정은 신청 인원이 3명 이상이면 확정하고, Honeymoon 일정은 총 2 couples/teams 이상이면 확정한다. |
 | FR-09 | 고객은 로그인 후 Travel History를 최근 여행 순으로 조회하며, 상품, 기간, Tour Style, 가격을 확인할 수 있다. |
 | FR-10 | 직원은 여행상품을 기획·조회·수정할 수 있다. |
 | FR-11 | 직원은 관련 물품 재고를 추가·조회할 수 있다. |

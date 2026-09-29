@@ -8,9 +8,9 @@ AI 기반 미스터 월드 테마 여행 서비스의 **공통 문서 저장소(
 
 **사람과 AI Agent 모두 코드 작성/수정 전에 아래 문서를 순서대로 반드시 확인해야 합니다.**
 
-승인된 최신 Baseline은 `docs/main`에 병합된 [Baseline v0.1.1](baseline/BASELINE-v0.1.1.md)입니다. [Baseline v0.1](baseline/BASELINE-v0.1.md)은 이전 승인 기준의 역사적 기록으로 보존합니다.
+승인 기준은 `docs/main`입니다. `docs/main`에 존재하는 최신 Baseline을 사용하며, feature branch 또는 미병합 PR의 Baseline은 proposal입니다. v0.1.2가 `docs/main`에 존재하면 최신 승인 Baseline입니다. v0.1과 v0.1.1은 이전 Baseline 기록으로 보존합니다.
 
-1. [Baseline v0.1.1](baseline/BASELINE-v0.1.1.md)
+1. 승인된 `docs/main`에 존재하는 최신 Baseline
 2. [Requirements](requirements/requirements.md)
 3. [Product Catalog](requirements/product-catalog.md)
 4. [Domain Model](requirements/domain-model.md)
