@@ -1,8 +1,8 @@
 # Development Baseline v0.1.1
 
-- Status: **Proposal** until merged into `docs/main`; approved implementation baseline after merge.
+- Status: **Approved Implementation Baseline** (`docs/main`).
 - Previous approved baseline: [v0.1](BASELINE-v0.1.md), retained as historical record.
-- Scope: the decisions below refine v0.1; unlisted requirements and TBD items are not decided by this proposal.
+- Scope: the decisions below refine v0.1; unlisted requirements and TBD items are not decided by this baseline.
 
 ## Fixed in v0.1.1
 
@@ -30,4 +30,4 @@
 
 ## Contract precedence and change policy
 
-Only the version merged into `docs/main` is approved. Before this proposal merges, implementation uses the approved `docs/main` baseline. After merge, use this baseline with the linked requirements, business rules, domain, API, and ERD documents. Surface conflicts or gaps as docs change proposals before changing implementation; do not resolve TBD by assumption.
+Only the version merged into `docs/main` is approved. Use this baseline with the linked requirements, business rules, domain, API, and ERD documents. Surface conflicts or gaps as docs change proposals before changing implementation; do not resolve TBD by assumption.

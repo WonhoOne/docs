@@ -1,6 +1,4 @@
-# Business Rules v0.1.1 (proposal)
-
-> `docs/main`에 병합되기 전까지 이 변경은 proposal입니다.
+# Business Rules v0.1.1
 
 공통 비즈니스 규칙의 최종 검증 책임은 Backend에 있습니다. Frontend 또는 Voice가 UI 수준에서 같은 제약을 적용하더라도 Backend 검증을 대체하지 않습니다.
 

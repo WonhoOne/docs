@@ -1,6 +1,6 @@
 # Non-functional Requirements v0.1.1
 
-> Status: **Proposal** until merged into `docs/main`. 최종 계획서의 평가 기준을 반영합니다.
+> Status: **Approved**. 최종 계획서의 평가 기준을 반영합니다.
 
 | ID | Requirement |
 | --- | --- |
