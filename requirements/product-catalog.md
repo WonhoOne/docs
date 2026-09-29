@@ -1,6 +1,6 @@
 # Product Catalog v0.1.1
 
-> Status: **Proposal** until merged into `docs/main`. This catalog defines the shared offerings without fixing detailed Hotel, Transport, Meal option lists or prices.
+> Status: **Approved**. This catalog defines the shared offerings without fixing detailed Hotel, Transport, Meal option lists or prices.
 
 ## Theme offerings
 

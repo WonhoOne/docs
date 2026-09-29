@@ -1,6 +1,4 @@
-# Domain Model v0.1.1 (proposal)
-
-> `docs/main`에 병합되기 전까지 이 변경은 proposal입니다.
+# Domain Model v0.1.1
 
 이 문서는 프로젝트 전 영역에서 사용하는 공통 용어의 의미를 정의합니다.
 

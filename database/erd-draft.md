@@ -1,6 +1,6 @@
-# ERD Skeleton v0.1.1 (proposal)
+# ERD Skeleton v0.1.1
 
-> Status: **Proposal / draft model skeleton** until merged into `docs/main`.
+> Status: **Approved shared model skeleton**. Detailed persistence design remains a draft for v0.2.
 >
 > 실제 PK/FK, 상세 column, nullable, index 및 Customer/Employee 구현 방식은 v0.2에서 확정합니다. 아래는 공통 Domain 개념과 최소 필드만 나타냅니다.
 

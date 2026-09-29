@@ -1,6 +1,6 @@
-# REST API Skeleton v0.1.1 (proposal)
+# REST API Skeleton v0.1.1
 
-> Status: **Proposal** until merged into `docs/main`.
+> Status: **Approved skeleton**. Detailed API design remains a draft for v0.2.
 >
 > v0.1.1에서 아래의 **resource naming, endpoint path, HTTP method는 FIXED**입니다. 기존 endpoint skeleton을 유지합니다. Agent는 이 문서에 없는 endpoint를 만들거나 공통 계약으로 확정하지 않습니다.
 

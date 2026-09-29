@@ -1,6 +1,4 @@
-# Requirements v0.1.1 (proposal)
-
-> `docs/main`에 병합되기 전까지 이 변경은 proposal이며, 승인된 요구사항은 `docs/main`을 기준으로 합니다.
+# Requirements v0.1.1
 
 ## System purpose
 
