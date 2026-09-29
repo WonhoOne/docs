@@ -1,11 +1,11 @@
 # Development Baseline v0.1.2
 
-- Status: **Proposal** until merged into `docs/main`.
-- Predecessor: [v0.1.1](BASELINE-v0.1.1.md), the approved implementation baseline on `docs/main` when this proposal was prepared.
+- Approval status: determined by repository location. This document is a proposal on an unmerged feature branch or PR and is the approved successor baseline when present on `docs/main`.
+- Predecessor: [v0.1.1](BASELINE-v0.1.1.md), retained as the preceding baseline.
 - Scope: refine the `HONEYMOON_ROMANCE` recruitment unit from a participant threshold to couple/team semantics. All v0.1.1 decisions not explicitly refined here remain in force, including its TBD items.
-- Approval rule: only content merged into `docs/main` is approved. After this document is merged, v0.1.2 becomes the latest approved implementation baseline.
+- Approval rule: `docs/main` is the approved source of truth. Feature branch and unmerged PR content remains a proposal. The latest Baseline present on `docs/main` is the approved implementation baseline.
 
-## Fixed by this proposal
+## Fixed in v0.1.2
 
 ### Honeymoon reservation unit
 
@@ -31,6 +31,6 @@ For Themes other than `HONEYMOON_ROMANCE`, confirmation remains at a sum of Rese
 
 ## Existing contract and TBD items
 
-All v0.1.1 contracts not explicitly refined above remain unchanged. This proposal does not decide participant-count UI placement, default or maximum; schedule capacity; availability details; participant-count effects on price or option availability; API DTO fields; authentication; detailed prices or Loyalty rules; Reservation status or cancellation; or SMS provider/retry policy. Whether an API response exposes `coupleCount` as a separate field remains for API v0.2.
+All v0.1.1 contracts not explicitly refined above remain unchanged. The following remain TBD: participant-count UI placement, default or maximum; schedule capacity; availability details; participant-count effects on price or option availability; API DTO fields; authentication; detailed prices or Loyalty rules; Reservation status or cancellation; and SMS provider/retry policy. Whether an API response exposes `coupleCount` as a separate field remains for API v0.2.
 
 The existing Theme and TourStyle catalogs, Theme/TourProduct distinction, TourSchedule concept, SMS requirement, Loyalty Discount requirement, minimum Customer/Employee signup data, Travel History behavior, REST paths and methods, Voice direction, NFR targets, and cancellation scope remain as defined by v0.1.1 and its linked documents.

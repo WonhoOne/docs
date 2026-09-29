@@ -1,12 +1,12 @@
 # AI Agent Instructions
 
-This repository is the project documentation SSOT. `docs/main` is the approved SSOT. A docs feature branch is a proposal until merged. Implementation Agents must not implement against an unapproved proposal.
+This repository is the project documentation SSOT. `docs/main` is the approved shared SSOT. A docs feature branch or unmerged PR is a proposal; implementation agents must not implement against it.
 
 ## Before any implementation task
 
-Read the latest Baseline present on approved `docs/main` in order. If v0.1.2 is present on `docs/main`, it is the latest approved implementation baseline; a v0.1.2 document on a feature branch is only a proposal until merged. Until then, v0.1.1 remains the approved baseline. Before a proposal is merged, follow the mandatory reading list on the approved `docs/main` branch:
+Before implementation, read the latest Baseline present on approved `docs/main`, followed by the documents below. When identifying the implementation baseline, use the latest Baseline version present on `docs/main`. Historical Baselines are retained for change history and are not the latest implementation reference.
 
-1. The latest approved baseline on `docs/main` (currently `baseline/BASELINE-v0.1.1.md`; use `baseline/BASELINE-v0.1.2.md` after it is merged)
+1. The latest approved Baseline on `docs/main`
 2. `requirements/requirements.md`
 3. `requirements/product-catalog.md`
 4. `requirements/domain-model.md`

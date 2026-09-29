@@ -1,4 +1,4 @@
-# Requirements v0.1.2 proposal
+# Requirements v0.1.2
 
 ## System purpose
 

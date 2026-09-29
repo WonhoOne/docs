@@ -1,4 +1,4 @@
-# Business Rules v0.1.2 proposal
+# Business Rules v0.1.2
 
 공통 비즈니스 규칙의 최종 검증 책임은 Backend에 있습니다. Frontend 또는 Voice가 UI 수준에서 같은 제약을 적용하더라도 Backend 검증을 대체하지 않습니다.
 

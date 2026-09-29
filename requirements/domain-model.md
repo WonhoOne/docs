@@ -1,4 +1,4 @@
-# Domain Model v0.1.2 proposal
+# Domain Model v0.1.2
 
 이 문서는 프로젝트 전 영역에서 사용하는 공통 용어의 의미를 정의합니다.
 
