@@ -4,9 +4,9 @@ This repository is the project documentation SSOT. `docs/main` is the approved S
 
 ## Before any implementation task
 
-After v0.1.1 is merged, read in order. Before merge, follow the mandatory reading list on the approved `docs/main` branch:
+Read the latest Baseline present on approved `docs/main` in order. If v0.1.2 is present on `docs/main`, it is the latest approved implementation baseline; a v0.1.2 document on a feature branch is only a proposal until merged. Until then, v0.1.1 remains the approved baseline. Before a proposal is merged, follow the mandatory reading list on the approved `docs/main` branch:
 
-1. `baseline/BASELINE-v0.1.1.md`
+1. The latest approved baseline on `docs/main` (currently `baseline/BASELINE-v0.1.1.md`; use `baseline/BASELINE-v0.1.2.md` after it is merged)
 2. `requirements/requirements.md`
 3. `requirements/product-catalog.md`
 4. `requirements/domain-model.md`
