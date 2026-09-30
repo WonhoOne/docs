@@ -105,7 +105,7 @@ TourProduct representation:
 }
 ```
 
-`availableStyles` is computed by Backend from Theme rules and is response-only. `stylePrices` contains exactly one positive integer KRW price for each allowed style and no disallowed style. Employee writes `stylePrices` entries as `{ "style", "amount" }`; currency is fixed to KRW. Duplicate styles are invalid.
+`availableStyles` is computed by Backend from Theme rules and is response-only. `stylePrices` contains exactly one positive integer KRW price for each allowed style and no disallowed style. Employee writes use the same `{ "style", "amount", "currency" }` entry shape, with `currency` equal to `KRW`. Duplicate styles are invalid.
 
 Allowed styles:
 
@@ -137,9 +137,9 @@ Example write request:
   "name": "제주 골프 여행",
   "description": "골프 리조트 여행",
   "stylePrices": [
-    {"style": "CLASSIC", "amount": 1200000},
-    {"style": "GRAND", "amount": 1800000},
-    {"style": "PREMIUM", "amount": 2500000}
+    {"style": "CLASSIC", "amount": 1200000, "currency": "KRW"},
+    {"style": "GRAND", "amount": 1800000, "currency": "KRW"},
+    {"style": "PREMIUM", "amount": 2500000, "currency": "KRW"}
   ]
 }
 ```
