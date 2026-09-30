@@ -1,4 +1,4 @@
-# Requirements v0.1.2
+# Requirements v0.2
 
 ## System purpose
 
@@ -9,53 +9,53 @@
 ### Customer
 
 - 회원 기능 이용
-- 여행상품 조회
-- Theme 선택 및 해당 TourProduct 선택
-- Tour Style 선택
-- 호텔 / 교통 / 식사 등 세부 옵션 변경
-- 여행 신청
-- 로그인 후 과거 여행 이력 조회
+- 여행상품 및 일정 조회
+- Theme에 속한 TourProduct 선택
+- Tour Style 및 세부 옵션 선택
+- TourSchedule에 Reservation 생성
+- 로그인 후 완료된 Travel History 조회
 - 정의된 주요 음성 명령 사용
 
 ### Employee
 
-- 여행상품 기획 / 조회 / 수정
+- TourProduct 기획 / 조회 / 수정
 - 관련 물품 재고 추가 / 조회
 
 ## Functional requirements
 
 | ID | Requirement |
 | --- | --- |
-| FR-01 | 고객과 직원의 회원 정보를 관리한다. Customer와 Employee 가입 시 최소 `name`, `address`, `contact`를 저장한다. |
-| FR-02 | 고객은 TourProduct 여행상품을 조회할 수 있다. |
-| FR-03 | 고객은 여행 테마를 선택할 수 있다. |
-| FR-04 | 고객은 Tour Style을 선택할 수 있다. |
-| FR-05 | 고객은 호텔, 교통, 식사 등 세부 옵션을 변경할 수 있다. |
-| FR-06 | 고객은 선택한 TourConfiguration으로 특정 TourSchedule에 예약할 수 있다. 일반 Theme Reservation은 `participantCount` 1명 이상이며, `HONEYMOON_ROMANCE` Reservation은 couple/team 단위로 2명 이상의 짝수 `participantCount`를 사용한다. 한 Reservation은 여러 명 또는 여러 couple/team을 포함할 수 있다. |
-| FR-07 | 시스템은 일반 일정의 신청 인원을 Reservation `participantCount` 합으로 집계하고, Honeymoon 일정의 모집 상태는 유효한 Reservation별 `participantCount / 2`에서 파생된 couple/team 수 합으로 집계한다. |
-| FR-08 | 일반 Theme 일정은 신청 인원이 3명 이상이면 확정하고, Honeymoon 일정은 총 2 couples/teams 이상이면 확정한다. |
-| FR-09 | 고객은 로그인 후 Travel History를 최근 여행 순으로 조회하며, 상품, 기간, Tour Style, 가격을 확인할 수 있다. |
-| FR-10 | 직원은 여행상품을 기획·조회·수정할 수 있다. |
-| FR-11 | 직원은 관련 물품 재고를 추가·조회할 수 있다. |
+| FR-01 | Customer와 Employee 계정을 관리한다. 가입 시 최소 `name`, `address`, `contact`를 저장한다. Public signup은 `loginId`, `password`, `name`, `address`, `contact`를 받고 CUSTOMER를 생성한다. EMPLOYEE 계정은 별도 public signup 없이 준비한다. |
+| FR-02 | 고객은 TourProduct를 조회할 수 있다. 각 상품은 정확히 하나의 Theme에 속하며, Theme별 상품 수는 0개 이상이다. |
+| FR-03 | 고객은 고정 Theme을 선택할 수 있다. Theme 전용 REST endpoint는 제공하지 않는다. |
+| FR-04 | 고객은 Tour Style을 선택할 수 있다. `HONEYMOON_ROMANCE`와 `PARENTS_HEALING`은 `GRAND` 또는 `PREMIUM`만 선택할 수 있다. |
+| FR-05 | 고객은 TourConfiguration의 Hotel, Transport, Meal 및 추가 옵션을 선택할 수 있다. 선택 값은 canonical ID를 사용한다. |
+| FR-06 | 인증된 고객은 특정 TourSchedule에 `participantCount`와 최종 `configuration`으로 예약할 수 있다. 일반 범위는 1..10, Honeymoon 허용 값은 2, 4, 6, 8, 10이다. |
+| FR-07 | 시스템은 일반 일정의 participant 합계와 Honeymoon 일정의 파생 couple/team 합계를 제공한다. Backend가 `recruitment` projection과 `reservable`을 판정한다. |
+| FR-08 | 일반 일정은 신청 participant 합계가 3 이상이면, Honeymoon 일정은 신청 couple/team 합계가 2 이상이면 확정된다. |
+| FR-09 | 고객은 본인의 완료된 Travel History를 최근 순으로 조회할 수 있으며 상품, 기간, 예약 당시 Tour Style, 가격을 확인한다. |
+| FR-10 | Employee는 TourProduct를 생성·조회·수정할 수 있다. Theme에서 허용되는 각 Tour Style의 판매 가격을 설정한다. |
+| FR-11 | Employee는 고정 품목 종류별 현재 재고를 조회하고 양의 수량을 추가할 수 있다. |
 | FR-12 | 고객은 정의된 주요 여행 선택 명령을 음성으로 입력할 수 있다. |
-| FR-13 | 음성 명령은 Backend 기능과 연동된다. |
-| FR-14 | TourSchedule이 최초 확정될 경우 신청 고객에게 SMS를 실제로 전송한다. |
-| FR-15 | 단골 고객에게 정의된 기준에 따라 할인 혜택을 적용할 수 있다. 단골 판정 기준, 할인율, 적용 시점, 중복 여부는 TBD이다. |
+| FR-13 | 음성 명령은 기존 Frontend 기능/API 경계를 통해 Backend 기능과 연동된다. 음성은 Reservation을 자동 제출하지 않는다. |
+| FR-14 | TourSchedule이 최초 확정될 때 해당 Schedule의 각 고객에게 SMS를 실제 전송한다. 전송 실패는 예약/확정 결과를 되돌리지 않는다. |
+| FR-15 | 새 Reservation 생성 전에 완료된 Travel History가 1건 이상인 고객은 subtotal의 5% Loyalty Discount를 받는다. 다른 할인과 중복 적용하지 않는다. |
 
-## Unresolved details
+## Shared contract summary
 
-- Loyalty Discount의 단골 고객 판정 기준, 할인율, 적용 시점, 중복 여부는 아직 승인되지 않았습니다. Agent가 임의로 결정하지 않습니다.
-- TravelHistory를 별도 Table로 저장할지는 TBD입니다.
-- SMS Provider는 TBD이지만 최종 production/demo 경로는 실제 SMS 전송을 제공해야 합니다.
+- Authentication: JWT Bearer Access Token. Token lifetime은 Backend-local 설정이며 Login의 `expiresIn`은 남은 seconds다.
+- Reservation의 소유자는 인증된 Customer이며 request에서 `customerId`, `tourId`, `theme`, 가격 또는 할인 정보를 받지 않는다.
+- TourProduct 가격은 TourStyle별 1인 단가(KRW 정수)다. Hotel/Transport/Meal/Extra 변경에 가격 차액을 적용하지 않는다.
+- Inventory는 current stock aggregate다. Reservation 생성이나 일정 확정 시 자동 차감하지 않는다.
+- Collection 응답은 plain JSON array이며 v0.2 pagination/envelope는 없다.
+- `participantCount`의 초기 UI 값, null 상태, 명시적 선택 요구, 조작 방식과 배치는 Frontend-local이다. Shared Contract는 자동 기본값을 요구하지 않는다.
 
-## Out of scope in v0.1.1
+## Out of scope in v0.2
 
-별도 팀 합의가 없는 한 다음 기능은 요구사항으로 간주하지 않습니다.
-
-- 온라인 결제
-- 환불
+- 온라인 결제, 환불
 - 실제 호텔/항공 예약 시스템 연동
-- 소셜 로그인
-- 관리자 웹 대시보드
+- 소셜 로그인, Refresh Token, logout endpoint
 - 자유 대화형 AI 여행 추천
-- 실시간 외부 여행상품 검색
+- Theme, Option, Price, SMS 전용 REST endpoint
+- TourSchedule CRUD, Reservation 취소/변경, Inventory 차감/수정/삭제 endpoint
+- Inventory 수량에 따른 상품/예약 차단, 옵션별 가격 차액
