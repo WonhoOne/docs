@@ -15,7 +15,7 @@
 | Reservation | 인증된 Customer가 Schedule에 신청한 기록. `participantCount` 및 당시 최종 TourConfiguration/price snapshot 포함 | Fixed concept; status/cancel contract 없음 |
 | RecruitmentUnit | 모집 집계 단위 `PARTICIPANT` 또는 `COUPLE_TEAM` | Fixed enum |
 | Inventory | item type별 현재 재고 aggregate. `id`, `itemType`, `quantity` | Fixed concept; one aggregate per type |
-| TravelHistory | 완료된 Reservation 여행 정보를 제공하는 Customer query/projection 개념 | Fixed; 별도 Entity/Table 불필요 |
+| TravelHistory | 완료된 Reservation 여행 정보를 제공하는 Customer query/projection 개념 | Fixed query/projection concept; 별도 Entity/Table 미강제; persistence/projection 전략 Backend-local |
 | Price | `unitPrice`, `subtotal`, `discount`, `total`, `currency`의 Reservation snapshot | Fixed value concept |
 
 ## Shared value catalog

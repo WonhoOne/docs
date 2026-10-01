@@ -1,6 +1,6 @@
 # REST API Contract v0.2
 
-> Status: v0.2 shared contract proposal. `docs/main` remains the approved SSOT until this change is merged. The filename and existing endpoint paths are retained because other repositories reference this path.
+> Status: Approval follows the Baseline rule: content on `docs/main` is approved SSOT; feature branch or unmerged PR content is a proposal. The filename and existing endpoint paths are retained because other repositories reference this path.
 
 ## 1. General conventions
 
@@ -288,7 +288,7 @@ An item is eligible only when its Schedule has `confirmed = true` and `endDate` 
 }
 ```
 
-`style` is the reserved `configuration.style`; `price.amount` is the Reservation snapshot `price.total`. Historical product name, Theme, dates, Style, and price meaning remain stable after later TourProduct edits. How Backend persists snapshots is implementation-local; a separate TravelHistory Entity/Table is not required. The API omits image, options, and `participantCount`. `reservationId` does not require a History detail route.
+`style` is the Reservation-time `configuration.style`; `price.amount` is the Reservation snapshot `price.total`. Historical product name, Theme, dates, Style, and price meaning remain stable after later TourProduct edits. How Backend persists snapshots is implementation-local; a separate TravelHistory Entity/Table is not required. The API omits image, options, and `participantCount`. `reservationId` does not require a History detail route.
 
 ## 8. Inventory
 

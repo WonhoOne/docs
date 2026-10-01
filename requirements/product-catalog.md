@@ -1,6 +1,6 @@
 # Product Catalog v0.2
 
-> Status: v0.2 shared catalog proposal. It becomes approved only when present on `docs/main` under the Baseline approval rule.
+> Status: Approval follows the Baseline rule: content on `docs/main` is approved SSOT; feature branch or unmerged PR content is a proposal.
 
 ## Theme offerings
 

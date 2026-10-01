@@ -1,6 +1,6 @@
 # ERD Shared Model v0.2
 
-> Status: v0.2 shared logical model proposal. This document defines Domain relationships and persistence meanings, not Backend's physical JPA schema.
+> Status: Approval follows the Baseline rule: content on `docs/main` is approved SSOT; feature branch or unmerged PR content is a proposal. This document defines Domain relationships and persistence meanings, not Backend's physical JPA schema.
 
 ## Logical entities and value concepts
 

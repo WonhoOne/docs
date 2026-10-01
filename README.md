@@ -8,7 +8,7 @@ AI 기반 미스터 월드 테마 여행 서비스의 **공통 문서 저장소(
 
 **사람과 AI Agent 모두 코드 작성/수정 전에 아래 문서를 순서대로 반드시 확인해야 합니다.**
 
-승인 기준은 `docs/main`입니다. `docs/main`에 존재하는 최신 Baseline을 사용하며 feature branch 또는 미병합 PR의 Baseline은 proposal입니다. 현재 `docs/main`의 최신 승인 Baseline은 v0.1.2이며, v0.2는 PR 병합 전까지 proposal입니다.
+승인 기준은 `docs/main`에 존재하는 최신 Baseline과 이에 연결된 shared documents입니다. 현재 저장소 트리에는 `BASELINE-v0.2.md`가 포함되어 있으며, 해당 Baseline이 `docs/main`에 존재할 때 v0.2가 최신 승인 Baseline입니다. Feature branch 또는 미병합 PR의 내용은 proposal입니다.
 
 1. 승인된 `docs/main`에 존재하는 최신 Baseline
 2. [Requirements](requirements/requirements.md)
@@ -28,6 +28,7 @@ AI 기반 미스터 월드 테마 여행 서비스의 **공통 문서 저장소(
 
 - 공통 요구사항, Business Rule, API Contract, ERD를 임의로 바꾸지 않습니다.
 - 문서에 없는 요구사항을 임의로 만들어 구현하지 않습니다.
+- Shared Contract에서 아직 승인되지 않은 미확정 사항은 임의로 확정하지 않습니다.
 - 계약 변경이 필요하면 코드 변경보다 먼저 docs 변경을 제안합니다.
 - Frontend/Voice/Console은 Backend의 비즈니스 규칙을 우회하거나 DB에 직접 접근하지 않습니다.
 - **각 Agent는 자기 담당 Repository 밖의 코드를 기본적으로 read-only로 취급합니다.**
