@@ -35,6 +35,15 @@
 | BR-29 | API collection은 plain JSON array이며 v0.2 pagination/envelope가 없다. stable ordering은 [REST API Contract](../api/api-spec-draft.md)를 따른다. |
 | BR-30 | `TourSchedule.reservable`은 현재 새 Reservation을 받을 수 있는지를 나타내는 Backend-derived boolean이다. v0.2에서는 `startDate`가 Backend business date보다 미래일 때만 true이며, 같은 날이거나 과거이면 false다. `confirmed = true` 자체는 예약 접수를 마감하지 않는다. Reservation 생성 시 Backend는 최신 business date를 기준으로 동일 정책을 다시 최종 검증한다. |
 
+| BR-31 | TourProduct에 연결된 TourSchedule이 하나 이상 존재하면 Employee는 해당 TourProduct의 `theme`을 다른 Theme으로 변경할 수 없다. 동일 Theme를 유지하는 PUT은 허용하며 `name`, `description`, `stylePrices`는 기존 계약에 따라 수정할 수 있다. 연결된 TourSchedule이 없으면 Theme 변경은 허용된다. 위반 시 `409 TOUR_PRODUCT_THEME_LOCKED`를 반환한다. |
+
+## TourProduct Theme change lock
+
+- BR-31의 Schedule 존재는 해당 TourProduct를 참조하는 Schedule row가 하나 이상 있다는 뜻입니다. 미래·당일·과거 일정, `confirmed` true/false, `reservable` true/false를 구분하지 않습니다.
+- Theme은 단순 표시 값이 아니라 Schedule 모집 방식과 Reservation 규칙을 결정합니다. 일반 Theme은 `PARTICIPANT` / `requiredCount = 3`, `HONEYMOON_ROMANCE`는 `COUPLE_TEAM` / `requiredCount = 2`로 해석합니다. Schedule 생성 후 Theme 변경으로 기존 일정의 의미가 소급 변경되지 않도록 Theme identity만 잠그며, 상품명·설명·가격은 계속 수정할 수 있습니다.
+- `stylePrices`는 요청 Theme의 complete allowed Style set을 정확히 만족해야 합니다. Schedule이 없는 상품을 `HONEYMOON_ROMANCE`로 변경하면 `GRAND`, `PREMIUM` 가격만 정확히 있어야 하며 `CLASSIC`은 허용되지 않습니다.
+- 이 규칙은 Schedule-time Theme snapshot이나 `TourSchedule.theme` column을 요구하지 않습니다. Physical persistence는 Backend-local입니다.
+
 ## Price and Loyalty
 
 - `unitPrice`는 TourProduct × 허용 TourStyle별 1 participant 가격입니다. Honeymoon도 participant 기준으로 계산합니다.
