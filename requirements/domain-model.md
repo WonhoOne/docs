@@ -38,6 +38,7 @@ REST API identifier (`id`, `tourId`, `scheduleId`, `reservationId`)는 양의 �
 
 - `Theme 1:N TourProduct`; Theme당 TourProduct가 0개일 수 있고 각 TourProduct는 정확히 하나의 Theme를 가집니다. Theme은 별도 REST resource가 아닙니다.
 - `TourProduct 1:N TourSchedule`; 한 Schedule은 하나의 TourProduct에 속합니다.
+- Theme은 TourProduct에 속합니다. 연결된 TourSchedule row가 하나 이상 존재하면 다른 Theme으로의 변경을 잠급니다(BR-31). 미래·당일·과거 일정 및 `confirmed`/`reservable` 상태를 구분하지 않으며, 연결된 Schedule이 없으면 Theme 변경은 허용됩니다. Theme이 결정하는 기존 Schedule 모집 의미(일반 `PARTICIPANT` / 기준 3, Honeymoon `COUPLE_TEAM` / 기준 2)와 Reservation 규칙이 소급 변경되지 않도록 하기 위한 제약입니다. 동일 Theme PUT과 `name`, `description`, `stylePrices` 수정은 기존 계약에 따라 계속 가능합니다. Schedule-time Theme snapshot이나 `TourSchedule.theme` column은 강제하지 않으며 physical persistence는 Backend-local입니다.
 - Customer는 여러 Reservation을 만들 수 있고 각 Reservation은 한 Customer와 한 TourSchedule에 연결됩니다.
 - `TourStyle`은 기본 구성이며 `TourConfiguration`과 다릅니다. Reservation의 configuration은 예약 당시 최종 선택 snapshot입니다.
 - 일반 Reservation의 `participantCount`는 1..10 정수입니다. Honeymoon은 2, 4, 6, 8, 10이며 `coupleCount = participantCount / 2`로 계산합니다. `coupleCount`는 파생 값이며 Couple/Team Entity를 도입하지 않습니다.

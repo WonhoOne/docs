@@ -129,6 +129,20 @@ TourProduct response does not contain Schedule, participant/recruitment state, R
 - `POST /api/v1/employee/tours` — EMPLOYEE; request fields: `theme`, `name`, `description`, `stylePrices`; success `201 Created` with TourProduct representation.
 - `PUT /api/v1/employee/tours/{tourId}` — EMPLOYEE; same request fields; success `200 OK` with updated TourProduct representation.
 
+For `PUT /api/v1/employee/tours/{tourId}`, BR-31 applies without changing the request fields (`theme`, `name`, `description`, `stylePrices`) or success representation:
+
+| Linked TourSchedules | Requested Theme | Result |
+| --- | --- | --- |
+| None | Different from current Theme | Theme change allowed under existing write validation |
+| One or more | Different from current Theme | `409 Conflict`, `TOUR_PRODUCT_THEME_LOCKED` |
+| One or more | Same as current Theme | PUT allowed; `name`, `description`, and `stylePrices` remain editable under existing write validation |
+
+A linked Schedule exists when at least one Schedule row references this TourProduct, regardless of future/same-day/past dates, `confirmed`, or `reservable`. Theme determines Schedule recruitment semantics (`PARTICIPANT` / required count 3 for general Themes; `COUPLE_TEAM` / required count 2 for Honeymoon), so locking a different-Theme change preserves existing Schedule meaning. This does not make the whole Product immutable or require a Schedule-time Theme snapshot.
+
+`stylePrices` must still contain the complete allowed Style set for the requested Theme. For example, changing a Product with no Schedules to `HONEYMOON_ROMANCE` requires exactly `GRAND` and `PREMIUM` prices; `CLASSIC` is disallowed.
+
+For an existing TourProduct and a syntactically valid request, requesting a different Theme while any linked Schedule exists returns `409 TOUR_PRODUCT_THEME_LOCKED`. A valid Theme value conflicts with the current resource state, rather than being a syntax, field-validation, or not-found error. This conflict uses the D-10 common error body: `code: TOUR_PRODUCT_THEME_LOCKED`, a human-readable `message`, and `fieldErrors: []`. This change does not define new error precedence when malformed JSON or ordinary DTO field validation errors coexist; existing D-10 semantics remain in effect. No endpoint, request/response field, or error body shape is added.
+
 Example write request:
 
 ```json
@@ -341,7 +355,7 @@ Every `application/json` API error has at least this body. `fieldErrors` is alwa
 | 401 | Login credential failure; missing, invalid, or expired token | `LOGIN_FAILED`, `AUTHENTICATION_REQUIRED`, `INVALID_ACCESS_TOKEN`, `ACCESS_TOKEN_EXPIRED` |
 | 403 | Authenticated but insufficient role/permission | `FORBIDDEN` |
 | 404 | Missing or intentionally hidden resource | `TOUR_PRODUCT_NOT_FOUND`, `TOUR_SCHEDULE_NOT_FOUND`, `RESERVATION_NOT_FOUND` |
-| 409 | Valid request conflicts with current state | `SCHEDULE_NOT_RESERVABLE`, `LOGIN_ID_ALREADY_EXISTS` |
+| 409 | Valid request conflicts with current state | `SCHEDULE_NOT_RESERVABLE`, `LOGIN_ID_ALREADY_EXISTS`, `TOUR_PRODUCT_THEME_LOCKED` |
 | 422 | Syntactically valid but Domain/Business validation failed | `VALIDATION_FAILED` |
 | 500 | Unexpected server failure | `INTERNAL_ERROR` |
 
