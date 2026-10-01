@@ -1,57 +1,50 @@
-# ERD Skeleton v0.1.1
+# ERD Shared Model v0.2
 
-> Status: **Approved shared model skeleton**. Detailed persistence design remains a draft for v0.2.
->
-> 실제 PK/FK, 상세 column, nullable, index 및 Customer/Employee 구현 방식은 v0.2에서 확정합니다. 아래는 공통 Domain 개념과 최소 필드만 나타냅니다.
+> Status: Approval follows the Baseline rule: content on `docs/main` is approved SSOT; feature branch or unmerged PR content is a proposal. This document defines Domain relationships and persistence meanings, not Backend's physical JPA schema.
 
-## Initial entity candidates
+## Logical entities and value concepts
 
 ```text
-Customer (signup: name, address, contact)
-Employee (signup: name, address, contact)
-Theme (four fixed values)
-TourProduct (one Theme; product name and basic information)
-TourSchedule (one TourProduct; period, recruitment state, participant total)
-TourStyle (CLASSIC / GRAND / PREMIUM defaults)
-TourConfiguration (Theme/TourProduct, TourStyle, Hotel, Transport, Meal, extras)
-Reservation (one Customer and TourSchedule; participantCount >= 1 integer; Honeymoon: >= 2 and even)
-Inventory (id, itemType, quantity)
+Customer (or User with role=CUSTOMER)
+  1 ───────── N Reservation N ───────── 1 TourSchedule N ───────── 1 TourProduct N ───────── 1 Theme
+                         1 ───────── 1 TourConfiguration (reservation-time selection)
+                         1 ───────── 1 ReservationPriceSnapshot
 
-TravelHistory: Customer query concept; separate table TBD
+Employee (or User with role=EMPLOYEE) ── manages ── TourProduct / Inventory
+
+Inventory: one current-stock aggregate per InventoryItemType
+TravelHistory: query/projection over eligible Reservation + TourSchedule data; no separate table required
 ```
 
-## Initial relationships
+`Theme` and `TourStyle` may be fixed value catalogs/enums rather than tables. `TourConfiguration` and `ReservationPriceSnapshot` describe shared logical data and do not force a specific table or embedded-object mapping.
 
-```text
-Theme 1 ───────── N TourProduct
-TourProduct 1 ─── N TourSchedule
-Customer 1 ───── N Reservation
-TourSchedule 1 ─ N Reservation
-Reservation 1 ── 1 TourConfiguration (conceptual skeleton)
-Employee ─────── TourProduct / Inventory 관리
-```
+## Relationship and field meaning
 
-## Persistence requirements
+- **Theme / TourProduct:** Theme 1:N TourProduct. A Theme can have zero products; every TourProduct has exactly one Theme. TourProduct carries product name/description and one positive integer KRW `unitPrice` for each Theme-allowed TourStyle. `availableStyles` is derived from Theme rules.
+- **TourProduct / TourSchedule:** one TourProduct has zero or more schedules; each Schedule references one TourProduct and has `startDate`, `endDate`, and Backend-derived `reservable`/`recruitment` view. Recruitment projection need not be stored as duplicated aggregate columns.
+- **Customer / Reservation / TourSchedule:** each Reservation belongs to one Customer and one Schedule. One Customer and one Schedule may each relate to multiple Reservations.
+- **Reservation party:** `participantCount` is validated 1..10; Honeymoon is 2, 4, 6, 8, or 10. `coupleCount = participantCount / 2` is derived for Honeymoon recruitment. No Couple/Team entity is introduced.
+- **TourConfiguration:** Reservation preserves its final `style`, `hotelOption`, `transportOption`, `mealOption`, and unique `extraOptions` as historical selection meaning.
+- **Price snapshot:** Reservation preserves `unitPrice`, `subtotal`, `discount` (or null), `total`, and `currency` as created. A later TourProduct price change does not alter the reservation snapshot.
+- **TravelHistory:** eligible when Schedule is confirmed and its `endDate` is before Backend business date. Historical product name, Theme, dates, Style, and price meaning must remain stable. The logical contract does not require `TravelHistory` entity/table; Backend chooses persistence/projection strategy.
+- **Employee / Inventory:** API role values are `CUSTOMER` and `EMPLOYEE`. Backend may use separate models or a shared User/Role structure. Inventory has one current aggregate per canonical `itemType`, with `quantity >= 0`.
 
-Database는 최소 다음 데이터를 안정적으로 저장/조회할 수 있어야 합니다.
+## Canonical catalog references
 
-- 회원
-- 여행상품
-- 여행 일정
-- 여행 신청
-- 선택 옵션 / 최종 여행 구성
-- 여행 이력 조회에 필요한 데이터
-- 재고
+- Theme: `HONEYMOON_ROMANCE`, `PARENTS_HEALING`, `GOLF_CHALLENGE`, `OUTDOOR_TREKKING`
+- TourStyle: `CLASSIC`, `GRAND`, `PREMIUM`
+- HotelOption: `HOTEL_3_STAR`, `HOTEL_4_STAR`, `HOTEL_5_STAR`
+- MealOption: `LUNCH_BOX`, `LOCAL_RESTAURANT`, `PREMIUM_RESTAURANT`
+- TransportOption: `PRIVATE_LUXURY_CAR_2`, `PREMIUM_VAN_10`
+- ExtraOption: `CHAMPAGNE`, `COFFEE`
+- InventoryItemType: `COUPLE_TSHIRT`, `GINSENG_GIFT`, `GOLF_BALL`, `SCARF`
 
-일반 TourSchedule의 신청 인원은 연결된 Reservation들의 `participantCount` 합으로 계산하고 총 3명 이상일 때 확정됩니다. Honeymoon 모집 합계는 유효한 Reservation마다 파생되는 `coupleCount = participantCount / 2`의 합으로 계산하며, 총 2 couples/teams 이상일 때 확정됩니다. 따라서 각 Honeymoon Reservation의 `participantCount`는 2 이상의 짝수여야 합니다. 이 의미 정리는 ERD 구조나 별도 Couple/Team Entity를 추가하지 않으며, 구체적인 persistence 표현은 미결정 상태로 둡니다. 취소 기능이나 취소 상태는 설계하지 않습니다.
+See [Product Catalog](../requirements/product-catalog.md) and [REST API Contract](../api/api-spec-draft.md) for canonical meanings and public DTOs.
 
-`Inventory`는 품목 종류와 현재 수량을 나타냅니다. 예시 `itemType`은 `COUPLE_TSHIRT`, `GINSENG_GIFT`, `GOLF_BALL`, `SCARF`입니다. 향후 SKU 상세, 입출고 이력, 재고 이동 기록이 필요해지면 `InventoryItem`/`InventoryTransaction`으로 분리할 수 있으나 v0.1.1에서는 분리하지 않습니다.
+## Persistence boundaries
 
-## TBD
-
-- Customer와 Employee를 단일 User + Role로 구성할지, 별도 모델로 구성할지
-- TravelHistory 별도 Table 여부
-- Reservation 상태 enum
-- 가격 및 할인 저장/계산 모델
-- Inventory 차감 시점과 상세 이력
-- TourSchedule 상세 column
+- This is not a physical schema prescription: PK/FK representation, columns, nullability, indexes, migrations, and Customer/Employee mapping are Backend-local.
+- No JWT/Refresh Token table is required by the shared model. v0.2 has no Refresh Token contract.
+- SMS outbox/retry persistence, transaction/locking strategy, and audit/transaction ledger are Backend-local; the shared ERD does not require physical tables for them.
+- Inventory decrement, automatic stock deduction, stock-based reservation blocking, and SKU/transaction history are outside v0.2.
+- Reservation status/cancellation fields and TravelHistory table are not required by the shared contract.

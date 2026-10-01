@@ -1,45 +1,50 @@
-# Domain Model v0.1.2
+# Domain Model v0.2
 
-이 문서는 프로젝트 전 영역에서 사용하는 공통 용어의 의미를 정의합니다.
+이 문서는 프로젝트 전 영역에서 사용하는 공통 용어의 의미를 정의합니다. Shared concept/enum은 persistence Entity와 구분합니다.
 
 | Term | Meaning | Status |
 | --- | --- | --- |
-| Theme | 4가지 여행 테마를 나타내는 분류: `HONEYMOON_ROMANCE`, `PARENTS_HEALING`, `GOLF_CHALLENGE`, `OUTDOOR_TREKKING` | Fixed |
-| TourProduct | Employee가 기획·관리하는 실제 여행상품. 하나의 Theme을 가지며 상품명과 기본 정보를 가진다. | Fixed concept; fields TBD |
-| TourSchedule | 특정 TourProduct의 실제 출발 일정. 여행 기간, 모집 상태 및 신청 인원 집계의 기준 단위 | Fixed concept; detailed fields TBD |
-| TourStyle | `CLASSIC`, `GRAND`, `PREMIUM` 중 하나. Hotel/Meal 등의 기본 구성을 결정한다. | Fixed |
-| TourConfiguration | 고객이 선택한 최종 구성: Theme/선택 TourProduct, TourStyle, Hotel, Transport, Meal, 추가 옵션의 선택 결과 | Fixed concept; detailed fields TBD |
-| Customer | TourProduct를 조회하고 예약하는 고객. 가입 시 최소 `name`, `address`, `contact`를 저장한다. | Fixed concept; persistence TBD |
-| Employee | TourProduct와 Inventory를 관리하는 직원. 가입 시 최소 `name`, `address`, `contact`를 저장한다. | Fixed concept; persistence TBD |
-| Reservation | Customer가 특정 TourSchedule에 신청한 기록. 일반적으로 한 건에 1명 이상을 포함하고 `participantCount`는 1 이상의 정수이다. `HONEYMOON_ROMANCE`에서는 2 이상의 짝수여야 하며 `coupleCount = participantCount / 2`로 해석한다. | Fixed concept; status enum TBD |
-| Inventory | 여행상품 제공에 필요한 재고 품목과 현재 수량을 관리한다. 최소 개념은 `id`, `itemType`, `quantity`이다. | Fixed concept; detailed fields TBD |
-| TravelHistory | 완료된 고객 여행 기록/조회 개념. 별도 Entity 여부는 미확정 | Concept fixed / persistence TBD |
+| Theme | 고정 분류 `HONEYMOON_ROMANCE`, `PARENTS_HEALING`, `GOLF_CHALLENGE`, `OUTDOOR_TREKKING` | Fixed enum |
+| TourProduct | Employee가 관리하는 실제 여행상품. 정확히 하나의 Theme에 속하고 이름, 설명 및 허용 Style별 가격을 가짐 | Fixed concept; persistence mapping local |
+| TourSchedule | 특정 TourProduct의 실제 출발 일정. 기간, 예약 가능 여부, 모집 projection과 확정 여부를 가짐 | Fixed concept; detailed persistence local |
+| TourStyle | `CLASSIC`, `GRAND`, `PREMIUM` 중 하나이며 초기 Hotel/Meal 구성을 결정 | Fixed enum |
+| TourConfiguration | Reservation에 선택한 `style`, `hotelOption`, `transportOption`, `mealOption`, `extraOptions` | Fixed value concept |
+| Customer | 상품을 조회하고 예약하는 사용자. public signup 최소 정보는 `loginId`, `password`, `name`, `address`, `contact` | Fixed role/concept |
+| Employee | TourProduct와 Inventory를 관리하는 사용자. 저장 최소 정보는 `name`, `address`, `contact`; v0.2 public Employee signup 없음 | Fixed role/concept |
+| UserRole | API authorization 역할 `CUSTOMER`, `EMPLOYEE` | Fixed enum |
+| Reservation | 인증된 Customer가 Schedule에 신청한 기록. `participantCount` 및 당시 최종 TourConfiguration/price snapshot 포함 | Fixed concept; status/cancel contract 없음 |
+| RecruitmentUnit | 모집 집계 단위 `PARTICIPANT` 또는 `COUPLE_TEAM` | Fixed enum |
+| Inventory | item type별 현재 재고 aggregate. `id`, `itemType`, `quantity` | Fixed concept; one aggregate per type |
+| TravelHistory | 완료된 Reservation 여행 정보를 제공하는 Customer query/projection 개념 | Fixed query/projection concept; 별도 Entity/Table 미강제; persistence/projection 전략 Backend-local |
+| Price | `unitPrice`, `subtotal`, `discount`, `total`, `currency`의 Reservation snapshot | Fixed value concept |
 
-## Shared values
-
-공통 분류 값은 다음과 같습니다. 실제 코드의 enum 구현 방식은 상세 설계에서 결정합니다.
+## Shared value catalog
 
 ```text
-Theme:
-- HONEYMOON_ROMANCE
-- PARENTS_HEALING
-- GOLF_CHALLENGE
-- OUTDOOR_TREKKING
-
-TourStyle:
-- CLASSIC
-- GRAND
-- PREMIUM
+Theme: HONEYMOON_ROMANCE, PARENTS_HEALING, GOLF_CHALLENGE, OUTDOOR_TREKKING
+TourStyle: CLASSIC, GRAND, PREMIUM
+UserRole: CUSTOMER, EMPLOYEE
+RecruitmentUnit: PARTICIPANT, COUPLE_TEAM
+HotelOption: HOTEL_3_STAR, HOTEL_4_STAR, HOTEL_5_STAR
+MealOption: LUNCH_BOX, LOCAL_RESTAURANT, PREMIUM_RESTAURANT
+TransportOption: PRIVATE_LUXURY_CAR_2, PREMIUM_VAN_10
+ExtraOption: CHAMPAGNE, COFFEE
+InventoryItemType: COUPLE_TSHIRT, GINSENG_GIFT, GOLF_BALL, SCARF
 ```
 
-## Modeling note
+REST API identifier (`id`, `tourId`, `scheduleId`, `reservationId`)는 양의 정수입니다. `tourId`는 `TourProduct.id`입니다.
 
-`TourStyle`은 기본 구성을 제공하며 `TourConfiguration`과 동일한 개념이 아닙니다. 고객은 Style 선택 이후 Hotel, Transport, Meal 등을 변경할 수 있습니다. 상품별 제공 항목과 Style 기본 구성은 [Product Catalog](product-catalog.md)를 따릅니다.
+## Relationship and semantic notes
 
-일반 TourSchedule의 총 신청 인원은 연결된 Reservation들의 `participantCount` 합이며 3명 이상이면 확정됩니다. Honeymoon TourSchedule의 모집 합계는 유효한 Honeymoon Reservation마다 파생된 `coupleCount`의 합이며, 2 couples/teams 이상이면 확정됩니다. 따라서 각 Honeymoon Reservation은 자체적으로 2 이상의 짝수 `participantCount`를 가져야 합니다. `coupleCount`는 모집 단위의 파생 의미이며 별도의 shared `Couple` 또는 `Team` Entity가 아닙니다. 이 의미만으로 persistence 구조를 정하지 않으며, API의 실제 field 이름이나 별도 `coupleCount` 반환 여부도 정하지 않습니다. 향후 API는 Frontend가 모집 상태를 임의 추론하지 않도록 충분한 정보를 제공해야 합니다. 여행 취소 기능과 Reservation 취소 상태는 정의하지 않습니다.
+- `Theme 1:N TourProduct`; Theme당 TourProduct가 0개일 수 있고 각 TourProduct는 정확히 하나의 Theme를 가집니다. Theme은 별도 REST resource가 아닙니다.
+- `TourProduct 1:N TourSchedule`; 한 Schedule은 하나의 TourProduct에 속합니다.
+- Customer는 여러 Reservation을 만들 수 있고 각 Reservation은 한 Customer와 한 TourSchedule에 연결됩니다.
+- `TourStyle`은 기본 구성이며 `TourConfiguration`과 다릅니다. Reservation의 configuration은 예약 당시 최종 선택 snapshot입니다.
+- 일반 Reservation의 `participantCount`는 1..10 정수입니다. Honeymoon은 2, 4, 6, 8, 10이며 `coupleCount = participantCount / 2`로 계산합니다. `coupleCount`는 파생 값이며 Couple/Team Entity를 도입하지 않습니다.
+- `TourSchedule.recruitment`는 `unit`, `currentCount`, `requiredCount`, `confirmed`를 포함합니다. 일반 단위는 `PARTICIPANT`(확정 기준 3), Honeymoon 단위는 `COUPLE_TEAM`(확정 기준 2)입니다. Backend가 제공한 값을 Client가 재계산하지 않습니다.
+- `reservable`은 현재 새 Reservation을 받을 수 있는지 나타내며 `confirmed`와 별개입니다.
+- `TourProduct`는 허용된 TourStyle별 1인 `unitPrice`를 가지며 Reservation은 계산 당시 가격 snapshot을 보존합니다.
+- TravelHistory는 confirmed Schedule의 `endDate`가 Backend business date보다 이전인 Reservation에서 제공됩니다. 과거 표시 의미는 이후 TourProduct 수정으로 바뀌지 않아야 합니다. 구체 snapshot/persistence 구현은 Backend-local입니다.
+- Inventory는 품목별 aggregate 한 건입니다. `quantity`는 0 이상의 현재고이며 API의 add 요청은 양수만 받습니다.
 
-로그인한 Customer의 Travel History는 최근 여행 순으로 상품, 기간, Tour Style, 가격을 보여줍니다. 별도 Table 필요 여부는 TBD입니다.
-
-### Migration note
-
-기존 문서의 `ThemeTour`는 공통 Domain 용어에서 `Theme`으로 정리합니다. 기존 `Tour`는 실제 직원 관리 상품을 의미할 때 `TourProduct`로 명확히 합니다. 기존 `InventoryItem`은 v0.1.1 범위에서 `Inventory`로 정리합니다. 향후 SKU 상세, 입출고 이력, 재고 이동 기록이 필요해지면 `InventoryItem` 또는 `InventoryTransaction`으로 분리할 수 있으나, 이번 범위에서는 분리하지 않습니다.
+세부 규칙과 wire field는 [Business Rules](business-rules.md)와 [REST API Contract](../api/api-spec-draft.md)를 따릅니다.
