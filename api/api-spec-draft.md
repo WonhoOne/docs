@@ -166,13 +166,17 @@ Representation:
 }
 ```
 
-Dates are calendar dates and `startDate <= endDate`. `recruitment.unit` is `PARTICIPANT` for non-Honeymoon schedules and `COUPLE_TEAM` for `HONEYMOON_ROMANCE`. `currentCount` is the aggregate in that unit; `requiredCount` is 3 participants or 2 couples/teams respectively. `confirmed` is Backend's schedule confirmation truth. `reservable` is Backend's current decision whether a new Reservation can be submitted and is distinct from `confirmed`. Client does not derive Honeymoon recruitment by dividing participants.
+Dates are calendar dates and `startDate <= endDate`. `recruitment.unit` is `PARTICIPANT` for non-Honeymoon schedules and `COUPLE_TEAM` for `HONEYMOON_ROMANCE`. `currentCount` is the aggregate in that unit; `requiredCount` is 3 participants or 2 couples/teams respectively. Client does not derive Honeymoon recruitment by dividing participants.
+
+`confirmed` indicates whether the recruitment threshold has been met and departure is confirmed. `reservable` is a Backend-derived boolean indicating whether a new Reservation can currently be submitted. In v0.2, `reservable = startDate > Backend business date`: a future departure date returns true; departure on the business date or in the past returns false. These values are independent: `confirmed = true` with a future `startDate` still returns `reservable = true`. Departure can already be confirmed while additional reservations are accepted before departure; reaching the confirmation threshold does not close reservations.
+
+`reservable` is a shared logical/API derived value; no physical DB column or persisted lifecycle flag is required. Physical persistence and the clock/timezone implementation providing Backend business date remain Backend-local, consistent with Travel History's business-date meaning.
 
 - `GET /api/v1/tour-schedules` — public; no query returns all customer-visible schedules, ordered `startDate ASC, id ASC`.
 - `GET /api/v1/tour-schedules?tourId={tourProductId}` — the only approved optional query. `tourId` must be a positive integer. A valid ID with no matching schedules returns `200 []`; malformed or invalid value returns `400 INVALID_QUERY_PARAMETER`.
 - `GET /api/v1/tour-schedules/{scheduleId}` — public; same representation as a collection item; not found returns `404 TOUR_SCHEDULE_NOT_FOUND`.
 
-v0.2 does not define a `CLOSED`/`CANCELLED` Schedule status enum or a duplicate public `totalParticipantCount` field. There are no TourSchedule create/update/delete endpoints. Initial/demo schedule provisioning is outside the public API and implementation-local.
+v0.2 reservability does not include schedule seat/participant capacity, sold-out state, manual recruitment close, recruitment deadline, or schedule cancellation. It does not define a `CLOSED`/`CANCELLED`/`SOLD_OUT` Schedule status enum, `remainingSeats`, `reservationUnavailableReason`, or a duplicate public `totalParticipantCount` field. There are no TourSchedule create/update/delete endpoints. Initial/demo schedule provisioning is outside the public API and implementation-local. Future docs-first Shared Contract changes may extend the calculation for capacity, recruitment close, or cancellation while retaining the public `reservable` boolean; those conditions are not current v0.2 rules.
 
 ## 5. TourConfiguration and options
 
@@ -202,6 +206,8 @@ Theme defaults: Honeymoon uses `PRIVATE_LUXURY_CAR_2`; Parents/Golf/Outdoor use 
 Reservation is owned by the authenticated Customer. Backend resolves `scheduleId → TourSchedule → TourProduct → Theme` and validates role, existence, `reservable`, party size, Theme/Style, canonical options, capacity, extra uniqueness, full configuration, and price.
 
 ### `POST /api/v1/reservations`
+
+At Reservation creation, Backend revalidates `reservable = startDate > Backend business date` using the latest business date. A previously fetched Schedule DTO with `reservable = true` does not guarantee creation. If the Schedule is no longer reservable, Backend returns the existing `409 SCHEDULE_NOT_RESERVABLE` error; no new error code is introduced.
 
 CUSTOMER only. Request:
 

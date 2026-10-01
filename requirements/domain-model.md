@@ -42,7 +42,7 @@ REST API identifier (`id`, `tourId`, `scheduleId`, `reservationId`)는 양의 �
 - `TourStyle`은 기본 구성이며 `TourConfiguration`과 다릅니다. Reservation의 configuration은 예약 당시 최종 선택 snapshot입니다.
 - 일반 Reservation의 `participantCount`는 1..10 정수입니다. Honeymoon은 2, 4, 6, 8, 10이며 `coupleCount = participantCount / 2`로 계산합니다. `coupleCount`는 파생 값이며 Couple/Team Entity를 도입하지 않습니다.
 - `TourSchedule.recruitment`는 `unit`, `currentCount`, `requiredCount`, `confirmed`를 포함합니다. 일반 단위는 `PARTICIPANT`(확정 기준 3), Honeymoon 단위는 `COUPLE_TEAM`(확정 기준 2)입니다. Backend가 제공한 값을 Client가 재계산하지 않습니다.
-- `reservable`은 현재 새 Reservation을 받을 수 있는지 나타내며 `confirmed`와 별개입니다.
+- `reservable`은 현재 신규 예약 접수 가능 여부를 나타내는 Backend-derived boolean입니다. v0.2에서는 `startDate`가 Backend business date보다 미래일 때만 true이며, 같은 날이거나 과거이면 false입니다. `confirmed`는 모집 임계치를 충족한 출발 확정 여부로, `reservable`과 독립적입니다. 따라서 “출발은 이미 확정됐지만 아직 출발일 전이라 추가 예약은 받을 수 있다”는 상황이 가능합니다. Shared logical/API derived value이므로 physical DB column이나 persisted lifecycle flag를 요구하지 않으며, physical persistence 방식은 Backend-local입니다.
 - `TourProduct`는 허용된 TourStyle별 1인 `unitPrice`를 가지며 Reservation은 계산 당시 가격 snapshot을 보존합니다.
 - TravelHistory는 confirmed Schedule의 `endDate`가 Backend business date보다 이전인 Reservation에서 제공됩니다. 과거 표시 의미는 이후 TourProduct 수정으로 바뀌지 않아야 합니다. 구체 snapshot/persistence 구현은 Backend-local입니다.
 - Inventory는 품목별 aggregate 한 건입니다. `quantity`는 0 이상의 현재고이며 API의 add 요청은 양수만 받습니다.

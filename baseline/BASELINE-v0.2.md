@@ -11,7 +11,7 @@
 
 - `Theme` is a fixed classification and `TourProduct` is an Employee-managed product. One Theme may have zero or more products; each product has exactly one Theme. `tourId` identifies `TourProduct.id`; no Theme endpoint is added.
 - `participantCount` is an integer from 1 through 10. Honeymoon reservations allow only 2, 4, 6, 8, or 10 participants and derive `coupleCount = participantCount / 2`. General schedules confirm at 3 participants; Honeymoon schedules confirm at 2 couples/teams.
-- `TourSchedule` exposes Backend-derived recruitment and reservability. The only collection filter is `tourId` on the existing schedule collection endpoint.
+- `TourSchedule` exposes Backend-derived recruitment and reservability. In v0.2 a schedule is reservable only while `startDate` is later than Backend business date; confirmation itself does not close reservations. The only collection filter is `tourId` on the existing schedule collection endpoint.
 - `TourConfiguration` uses canonical option IDs. Transport capacity must cover the reservation participant count. Option price deltas and inventory-based availability are not part of v0.2.
 
 ### Authentication and REST API
