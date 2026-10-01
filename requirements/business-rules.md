@@ -33,6 +33,7 @@
 | BR-27 | 최초 Schedule 확정 event는 해당 시점 Schedule의 모든 distinct Customer를 대상으로 한다. SMS provider 실패는 Reservation/확정을 rollback하지 않고, 한 수신자 실패가 다른 수신자 처리를 중단하지 않는다. 실패 notification은 retry 가능한 상태로 보존한다. |
 | BR-28 | Voice는 Reservation draft를 만들거나 바꿀 수 있지만 Review 후 사용자가 GUI에서 명시적으로 submit한다. Voice는 자동 Reservation POST, 인증 credential, 취소/환불/결제, Employee mutation을 수행하지 않는다. |
 | BR-29 | API collection은 plain JSON array이며 v0.2 pagination/envelope가 없다. stable ordering은 [REST API Contract](../api/api-spec-draft.md)를 따른다. |
+| BR-30 | `TourSchedule.reservable`은 현재 새 Reservation을 받을 수 있는지를 나타내는 Backend-derived boolean이다. v0.2에서는 `startDate`가 Backend business date보다 미래일 때만 true이며, 같은 날이거나 과거이면 false다. `confirmed = true` 자체는 예약 접수를 마감하지 않는다. Reservation 생성 시 Backend는 최신 business date를 기준으로 동일 정책을 다시 최종 검증한다. |
 
 ## Price and Loyalty
 
@@ -49,6 +50,6 @@
 
 ## Important boundaries
 
-- ReservationStatus, Reservation cancellation/change, payment/refund, schedule lifecycle/capacity, inventory deduction, option price delta는 v0.2 shared contract에 없습니다.
+- ReservationStatus, Reservation cancellation/change, payment/refund, schedule lifecycle/capacity(수동 모집 마감 및 일정 취소 포함), inventory deduction, option price delta는 v0.2 shared contract에 없습니다.
 - `coupleCount`는 파생 집계 의미이며 Couple/Team Entity가 아닙니다.
 - UI 초기 선택값, route, API token storage, physical persistence, transaction/locking 및 외부 provider 구현은 각 repository-local입니다.
