@@ -67,4 +67,4 @@ Speech
 
 ## Local implementation choices
 
-STT wrapper, Web Speech API internals, parser/matcher algorithm, synonym dictionary, confidence threshold, retry prompt, and Employee Console component state are ai-console-local. UI route behavior and bridge details are Frontend/integration-local. Tests evaluate canonical command + args interpretation rather than raw transcript equality.
+STT wrapper, Web Speech API internals, parser/matcher algorithm, synonym dictionary, confidence threshold, and retry prompt are Voice implementation-local under the approved Frontend Voice directories (`src/integrations/voice/**` and `src/features/voice-bridge/**`) defined in [Repository Responsibilities](repository-responsibilities.md). Employee Console component state is Frontend-local. UI route behavior and bridge details are Frontend/integration-local. Tests evaluate canonical command + args interpretation rather than raw transcript equality.
