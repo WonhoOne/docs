@@ -36,6 +36,8 @@ AI 기반 미스터 월드 테마 여행 서비스의 **공통 문서 저장소(
 - 타 파트 코드 변경이 필요하면 해당 Repository Owner에게 Issue/변경 요청을 전달합니다. 팀/Owner가 명시적으로 작업을 위임한 경우에만 예외적으로 수정할 수 있습니다.
 - 구현 결과가 `docs/main`의 승인 Baseline과 충돌하면 승인 Baseline을 우선하고, 변경이 필요하면 팀 합의를 위한 Issue/PR을 만듭니다.
 
+B9 최종 통합 완료 근거와 Gate 판정: [B9 Integration Closeout](B9-INTEGRATION-CLOSEOUT.md).
+
 ## Repository structure
 
 ```text
